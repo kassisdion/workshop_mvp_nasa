@@ -5,7 +5,7 @@ import android.support.annotation.CallSuper
 import android.view.View
 import com.eldorne.workshop.helper.WindowsHelper
 
-abstract class BaseFullScreenActivity: BaseActivity() {
+abstract class BaseFullScreenActivity : BaseActivity() {
 
     /*
     ************************************************************************************************
@@ -22,5 +22,5 @@ abstract class BaseFullScreenActivity: BaseActivity() {
     ** Method every child will have to implement
     ************************************************************************************************
     */
-    protected abstract fun getTopView() : View
+    protected abstract fun getTopView(): View
 }

@@ -5,7 +5,6 @@ import android.support.annotation.CallSuper
 open class BasePresenter<T : BaseView> {
 
     protected var view: T? = null
-        get() = null
         private set
 
     @CallSuper

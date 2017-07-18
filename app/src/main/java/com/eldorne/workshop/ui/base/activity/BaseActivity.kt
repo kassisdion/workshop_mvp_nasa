@@ -7,7 +7,7 @@ import android.support.annotation.LayoutRes
 import android.support.v7.app.AppCompatActivity
 
 @SuppressLint("Registered")
-abstract class BaseActivity: AppCompatActivity() {
+abstract class BaseActivity : AppCompatActivity() {
 
     /*
     ************************************************************************************************

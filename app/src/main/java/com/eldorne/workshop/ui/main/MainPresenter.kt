@@ -6,9 +6,13 @@ import javax.inject.Inject
 class MainPresenter
 @Inject
 constructor(/*Add needed dependencies here*/)
-        : BasePresenter<MainActivityView>() {
+    : BasePresenter<MainActivityView>() {
 
     fun setupView(firsName: String, lastName: String) {
         view?.populateName("""$firsName $lastName""")
+    }
+
+    fun onItemHomeClick() {
+        view?.stopProcess()
     }
 }

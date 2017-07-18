@@ -16,5 +16,5 @@ class AppModule(val app: WorkshopApplication) {
 
     @Provides
     @Singleton
-    fun provideApplication() : Application = app
+    fun provideApplication(): Application = app
 }
