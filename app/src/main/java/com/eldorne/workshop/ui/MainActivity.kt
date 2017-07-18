@@ -2,13 +2,13 @@ package com.eldorne.workshop.ui
 
 import android.content.Context
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-
+import android.view.View
 import com.eldorne.workshop.R
+import com.eldorne.workshop.ui.base.BaseActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
 
     /*
     ************************************************************************************************
@@ -38,6 +38,10 @@ class MainActivity : AppCompatActivity() {
         TextView_identity
     }
 
+    private val mTopView by lazy {
+        toolbar
+    }
+
     private val mFirstName by lazy {
         intent.getStringExtra(INTENT_ARG_FIRSTNAME)
     }
@@ -51,18 +55,25 @@ class MainActivity : AppCompatActivity() {
     ** Life cycle
     ************************************************************************************************
     */
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
+
+    override fun init(savedInstanceState: Bundle?) {
         setupView()
     }
 
+    override fun getLayoutResource(): Int {
+        return R.layout.activity_main
+    }
+
+    override fun getTopView(): View {
+        return mTopView
+    }
+
     /*
-    ************************************************************************************************
-    ** Private method
-    ************************************************************************************************
-    */
+                ************************************************************************************************
+                ** Private method
+                ************************************************************************************************
+                */
     private fun setupView() {
         mTextviewIdentity.text = "$mFirstName $mLastName"
     }

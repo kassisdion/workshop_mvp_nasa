@@ -1,14 +1,17 @@
-package com.eldorne.workshop.ui
+package com.eldorne.workshop.ui.form
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.app.ActionBar
 import android.view.MenuItem
 import com.eldorne.workshop.R
+import com.eldorne.workshop.ui.MainActivity
 import kotlinx.android.synthetic.main.activity_form.*
 import kotlinx.android.synthetic.main.activity_form_content.*
 
-class FormActivity : AppCompatActivity() {
+class FormActivity : AppCompatActivity(), FormView {
+
+
     /*
     ************************************************************************************************
     ** Private field
@@ -36,6 +39,10 @@ class FormActivity : AppCompatActivity() {
         supportActionBar
     }
 
+    private val mPresenter by lazy {
+        FormPresenter()
+    }
+
     /*
     ************************************************************************************************
     ** Life cycle
@@ -44,6 +51,7 @@ class FormActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_form)
+        mPresenter.onAttach(this)
 
         setupToolbar()
         setupView()
@@ -53,7 +61,7 @@ class FormActivity : AppCompatActivity() {
         when(item?.itemId) {
             android.R.id.home -> {
                 //User click on back arrow, just finish
-                finish()
+                mPresenter.onItemHomeClick()
             }
             else -> {
                 super.onOptionsItemSelected(item)
@@ -78,44 +86,37 @@ class FormActivity : AppCompatActivity() {
             val firstName = mTextInputLayoutFirstName.editText?.text.toString()
             val lastName = mTextInputLayoutLastName.editText?.text.toString()
 
-            if (isInputValid(firstName, lastName)) {
-                //Input is valid, start the main activity
-                val intent = MainActivity.newIntent(this, firstName, lastName)
-                startActivity(intent)
-            }
+            mPresenter.onAttemptValidation(firstName, lastName)
         }
     }
 
-    private fun isInputValid(firstName: String?,
-                             lastName: String): Boolean {
-        return (validateFirstName(firstName) && validateLastName(lastName))
+    override fun navigateToMainActivity(firstName: String, lastName: String) {
+        val intent = MainActivity.newIntent(this, firstName, lastName)
+        startActivity(intent)
     }
 
-    private fun validateFirstName(firstName: String?): Boolean {
-        if (firstName.isNullOrBlank())  {
-            mTextInputLayoutFirstName.isErrorEnabled = true
-            mTextInputLayoutFirstName.error = "Prénom invalide"
-
-            return false
-        } else {
-            mTextInputLayoutFirstName.isErrorEnabled = false
-            mTextInputLayoutFirstName.error = null
-
-            return true
-        }
+    override fun setErrorOnFirstName(error: String) {
+        mTextInputLayoutFirstName.isErrorEnabled = true
+        mTextInputLayoutFirstName.error = error
+    }
+    override fun removeErrorFirstName()
+    {
+        mTextInputLayoutFirstName.isErrorEnabled = false
+        mTextInputLayoutFirstName.error = null
     }
 
-    private fun validateLastName(lastName: String?): Boolean {
-        if (lastName.isNullOrBlank())  {
-            mTextInputLayoutLastName.isErrorEnabled = true
-            mTextInputLayoutLastName.error = "Nom invalide"
 
-            return false
-        } else {
-            mTextInputLayoutLastName.isErrorEnabled = false
-            mTextInputLayoutLastName.error = null
+    override fun removeErrorLastName()
+    {
+        mTextInputLayoutLastName.isErrorEnabled = false
+        mTextInputLayoutLastName.error = null
+    }
+    override fun setErrorOnLastName(error: String) {
+        mTextInputLayoutLastName.isErrorEnabled = true
+        mTextInputLayoutLastName.error = error
+    }
 
-            return true
-        }
+    override fun stopProcess() {
+        finish()
     }
 }

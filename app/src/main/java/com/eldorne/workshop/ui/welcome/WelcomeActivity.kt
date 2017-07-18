@@ -1,12 +1,14 @@
-package com.eldorne.workshop.ui
+package com.eldorne.workshop.ui.welcome
 
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.eldorne.workshop.R
+import com.eldorne.workshop.ui.base.BaseActivity
+import com.eldorne.workshop.ui.form.FormActivity
 import kotlinx.android.synthetic.main.activity_welcome.*
 
-class WelcomeActivity : AppCompatActivity()
+class WelcomeActivity : BaseActivity(), WelcomeView
 {
     /*
     ************************************************************************************************
@@ -19,6 +21,10 @@ class WelcomeActivity : AppCompatActivity()
         welcomeActivity_startButton
     }
 
+    private val mPresenter by lazy {
+        WelcomPresenter()
+    }
+
     /*
     ************************************************************************************************
     ** Life cycle
@@ -28,20 +34,29 @@ class WelcomeActivity : AppCompatActivity()
         super.onCreate(savedInstanceState)
         // Set the content view of the current activity of default activity
         this.setContentView(R.layout.activity_welcome)
-
+        mPresenter.onAttach(this)
         setupView()
     }
 
     /*
     ************************************************************************************************
-    ** Private method
+    ** WelcomeView implementation
     ************************************************************************************************
      */
+    override fun navigateToFormActivity() {
+        startActivity(Intent(this, FormActivity::class.java))
+    }
+
+    /*
+        ************************************************************************************************
+        ** Private method
+        ************************************************************************************************
+         */
     private fun setupView() {
         //Add a simple "click listener" on the button
         mStartButton.setOnClickListener {
             //Simply start the formActivity
-            startActivity(Intent(this, FormActivity::class.java))
+            mPresenter.onStartClick()
         }
     }
 }
