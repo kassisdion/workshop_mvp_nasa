@@ -1,19 +1,19 @@
 package com.eldorne.workshop.ui.form
 
-import com.eldorne.workshop.ui.MainActivity
-import com.eldorne.workshop.ui.base.BasePresenter
+import com.eldorne.workshop.ui.base.presenter.BasePresenter
+import javax.inject.Inject
 
-/**
- * Created by eldorne on 11/07/17.
- */
+class FormPresenter
+@Inject
+constructor(/*Add needed dependencies here*/)
 
-class FormPresenter: BasePresenter<FormView>() {
+    : BasePresenter<FormView>() {
 
     fun onItemHomeClick() {
         view?.stopProcess()
     }
 
-    fun  onAttemptValidation(firstName: String, lastName: String) {
+    fun onAttemptValidation(firstName: String, lastName: String) {
         if (isInputValid(firstName, lastName)) {
             //Input is valid, start the main activity
             view?.navigateToMainActivity(firstName, lastName)
@@ -27,23 +27,23 @@ class FormPresenter: BasePresenter<FormView>() {
     }
 
     private fun validateFirstName(firstName: String?): Boolean {
-        if (firstName.isNullOrBlank())  {
+        if (firstName.isNullOrBlank()) {
             view?.setErrorOnFirstName("Prénom invalide")
 
             return false
         } else {
-            view?.removeErrorFirstName()
+            view?.removeErrorOnFirstName()
 
             return true
         }
     }
 
     private fun validateLastName(lastName: String?): Boolean {
-        if (lastName.isNullOrBlank())  {
+        if (lastName.isNullOrBlank()) {
             view?.setErrorOnLastName("Nom invalide")
             return false
         } else {
-            view?.removeErrorLastName()
+            view?.removeErrorOnLastName()
 
             return true
         }

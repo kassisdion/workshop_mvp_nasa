@@ -6,23 +6,17 @@ import android.view.View
 import android.view.Window
 import android.view.WindowManager
 
-
-/**
- * Created by eldorne on 11/07/17.
- */
 object WindowsHelper {
 
-    private val isKitkat: Boolean
-        get() = Build.VERSION.SDK_INT >= 19
     /*
-    ------------------------------------------------------------------------------------------------
-    public (static) method
-    ------------------------------------------------------------------------------------------------
+    ************************************************************************************************
+    ** Public fun
+    ************************************************************************************************
      */
     fun setStatusBarTranslucent(window: Window,
                                 topView: View,
                                 makeTranslucent: Boolean) {
-        if (isKitkat) {
+        if (isKitkatOrOver()) {
             if (makeTranslucent) {
                 //Make status bar translucent
                 window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
@@ -44,23 +38,21 @@ object WindowsHelper {
     }
 
     /*
-    ------------------------------------------------------------------------------------------------
-    Internal method
-    ------------------------------------------------------------------------------------------------
+    ************************************************************************************************
+    ** Private fun
+    ************************************************************************************************
      */
-
-
     private fun getStatusBarHeight(context: Context): Int {
-        val resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android")
+        val resourceId = context.resources.getIdentifier("status_bar_height", "dimen", "android")
 
         var result = 0
         if (resourceId > 0) {
-            result = context.getResources().getDimensionPixelSize(resourceId)
+            result = context.resources.getDimensionPixelSize(resourceId)
         }
         return result
     }
-}/*
-    ------------------------------------------------------------------------------------------------
-    Constructor
-    ------------------------------------------------------------------------------------------------
-     *///Private constructor for avoiding this class to be construct
+
+    private fun isKitkatOrOver(): Boolean {
+        return Build.VERSION.SDK_INT >= 19
+    }
+}

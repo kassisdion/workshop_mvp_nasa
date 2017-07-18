@@ -2,14 +2,14 @@ package com.eldorne.workshop.ui.welcome
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import com.eldorne.workshop.R
-import com.eldorne.workshop.ui.base.BaseActivity
+import com.eldorne.workshop.WorkshopApplication
+import com.eldorne.workshop.ui.base.activity.BaseActivity
 import com.eldorne.workshop.ui.form.FormActivity
 import kotlinx.android.synthetic.main.activity_welcome.*
+import javax.inject.Inject
 
-class WelcomeActivity : BaseActivity(), WelcomeView
-{
+class WelcomeActivity : BaseActivity(), WelcomeView {
     /*
     ************************************************************************************************
     ** Private field
@@ -21,20 +21,25 @@ class WelcomeActivity : BaseActivity(), WelcomeView
         welcomeActivity_startButton
     }
 
-    private val mPresenter by lazy {
-        WelcomPresenter()
-    }
+    /*
+    ************************************************************************************************
+    ** Injection
+    ************************************************************************************************
+     */
+    @Inject
+    lateinit var mPresenter: WelcomePresenter
 
     /*
     ************************************************************************************************
     ** Life cycle
     ************************************************************************************************
      */
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        // Set the content view of the current activity of default activity
-        this.setContentView(R.layout.activity_welcome)
-        mPresenter.onAttach(this)
+    override fun getLayoutResource(): Int {
+        return R.layout.activity_welcome
+    }
+
+    override fun init(savedInstanceState: Bundle?) {
+        setupPresenter()
         setupView()
     }
 
@@ -48,15 +53,20 @@ class WelcomeActivity : BaseActivity(), WelcomeView
     }
 
     /*
-        ************************************************************************************************
-        ** Private method
-        ************************************************************************************************
-         */
+    ************************************************************************************************
+    ** Private method
+    ************************************************************************************************
+     */
+    private fun setupPresenter() {
+        WorkshopApplication.workshopComponent.inject(this)
+        mPresenter.onAttachView(this)
+    }
+
     private fun setupView() {
         //Add a simple "click listener" on the button
         mStartButton.setOnClickListener {
             //Simply start the formActivity
-            mPresenter.onStartClick()
+            mPresenter.onStartClicked()
         }
     }
 }

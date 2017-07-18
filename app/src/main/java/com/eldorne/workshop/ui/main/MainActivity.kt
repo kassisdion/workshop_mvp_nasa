@@ -1,39 +1,53 @@
-package com.eldorne.workshop.ui.form
+package com.eldorne.workshop.ui.main
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.ActionBar
 import android.view.MenuItem
+import android.view.View
 import com.eldorne.workshop.R
 import com.eldorne.workshop.WorkshopApplication
-import com.eldorne.workshop.ui.base.activity.BaseActivity
-import com.eldorne.workshop.ui.main.MainActivity
-import kotlinx.android.synthetic.main.activity_form.*
-import kotlinx.android.synthetic.main.activity_form_content.*
+import com.eldorne.workshop.ui.base.activity.BaseFullScreenActivity
+import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
-class FormActivity : BaseActivity(), FormView {
+class MainActivity : BaseFullScreenActivity(), MainActivityView {
+
+    /*
+    ************************************************************************************************
+    ** Builder
+    ************************************************************************************************
+    */
+    companion object Builder {
+        private val INTENT_ARG_FIRSTNAME = "MainActivity.INTENT_ARG_FIRSTNAME"
+        private val INTENT_ARG_LASTNAME = "MainActivity.INTENT_ARG_LASTNAME"
+
+        fun newIntent(context: Context,
+                      firstName: String,
+                      lastName: String): Intent {
+            val intent = Intent(context, MainActivity::class.java)
+            intent.putExtra(INTENT_ARG_FIRSTNAME, firstName)
+            intent.putExtra(INTENT_ARG_LASTNAME, lastName)
+            return intent
+        }
+    }
 
     /*
     ************************************************************************************************
     ** Private field
     ************************************************************************************************
     */
-    //With Lazy we are going to create it as a non-nullable property
-    //and will be executed just when you use it and just the first time.
-    private val mtoolbar by lazy {
+    private val mToolbar by lazy {
         toolbar
     }
 
-    private val mTextInputLayoutFirstName by lazy {
-        TextInputLayout_firstName
+    private val mFirstName by lazy {
+        intent.getStringExtra(INTENT_ARG_FIRSTNAME)
     }
 
-    private val mTextInputLayoutLastName by lazy {
-        TextInputLayout_lastName
-    }
-
-    private val mButton by lazy {
-        button_default_activity_validate
+    private val mLastName by lazy {
+        intent.getStringExtra(INTENT_ARG_LASTNAME)
     }
 
     private val mActionbar: ActionBar? by lazy {
@@ -46,21 +60,26 @@ class FormActivity : BaseActivity(), FormView {
     ************************************************************************************************
     */
     @Inject
-    lateinit var mPresenter: FormPresenter
+    lateinit var mPresenter: MainPresenter
 
     /*
     ************************************************************************************************
     ** Life cycle
     ************************************************************************************************
-     */
+    */
     override fun getLayoutResource(): Int {
-        return R.layout.activity_form
+        return R.layout.activity_main
     }
 
     override fun init(savedInstanceState: Bundle?) {
+        super.init(savedInstanceState)
         setupPresenter()
         setupToolbar()
-        setupView()
+        mPresenter.setupView(mFirstName, mLastName)
+    }
+
+    override fun getTopView(): View {
+        return mToolbar
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -78,32 +97,11 @@ class FormActivity : BaseActivity(), FormView {
 
     /*
     ************************************************************************************************
-    ** FormView implementation
+    ** MainActivityView implementation
     ************************************************************************************************
-     */
-    override fun navigateToMainActivity(firstName: String, lastName: String) {
-        val intent = MainActivity.newIntent(this, firstName, lastName)
-        startActivity(intent)
-    }
-
-    override fun setErrorOnFirstName(error: String) {
-        mTextInputLayoutFirstName.isErrorEnabled = true
-        mTextInputLayoutFirstName.error = error
-    }
-
-    override fun removeErrorOnFirstName() {
-        mTextInputLayoutFirstName.isErrorEnabled = false
-        mTextInputLayoutFirstName.error = null
-    }
-
-    override fun removeErrorOnLastName() {
-        mTextInputLayoutLastName.isErrorEnabled = false
-        mTextInputLayoutLastName.error = null
-    }
-
-    override fun setErrorOnLastName(error: String) {
-        mTextInputLayoutLastName.isErrorEnabled = true
-        mTextInputLayoutLastName.error = error
+    */
+    override fun populateName(name: String) {
+        mActionbar?.title = name
     }
 
     override fun stopProcess() {
@@ -112,26 +110,16 @@ class FormActivity : BaseActivity(), FormView {
 
     /*
     ************************************************************************************************
-    ** Private fun
+    ** Private method
     ************************************************************************************************
-     */
+    */
     private fun setupPresenter() {
         WorkshopApplication.workshopComponent.inject(this)
         mPresenter.onAttachView(this)
     }
 
     private fun setupToolbar() {
-        setSupportActionBar(mtoolbar)
-        mActionbar?.title = "Décline ton identité"
+        setSupportActionBar(mToolbar)
         mActionbar?.setDisplayHomeAsUpEnabled(true)
-    }
-
-    private fun setupView() {
-        mButton.setOnClickListener { x ->
-            val firstName = mTextInputLayoutFirstName.editText?.text.toString()
-            val lastName = mTextInputLayoutLastName.editText?.text.toString()
-
-            mPresenter.onAttemptValidation(firstName, lastName)
-        }
     }
 }
