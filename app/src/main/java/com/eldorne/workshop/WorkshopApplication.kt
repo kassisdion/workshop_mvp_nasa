@@ -15,6 +15,9 @@ class WorkshopApplication : Application() {
     ** Singleton
     ************************************************************************************************
     */
+    /**
+     * Simple singleton used to access to [WorkshopComponent] instance needed for resolving injection
+     */
     companion object {
         lateinit var workshopComponent: WorkshopComponent
 
@@ -30,11 +33,23 @@ class WorkshopApplication : Application() {
     */
     override fun onCreate() {
         super.onCreate()
+        setupComponents()
+    }
 
+    /*
+    ************************************************************************************************
+    ** Private fun
+    ************************************************************************************************
+    */
+    /**
+     * Simpli initialise [WorkshopComponent] singleton
+     */
+    private fun setupComponents() {
         workshopComponent = DaggerWorkshopComponent
                 .builder()
                 .appModule(AppModule(this))
                 .networkModule(NetworkModule())
                 .build()
     }
+
 }

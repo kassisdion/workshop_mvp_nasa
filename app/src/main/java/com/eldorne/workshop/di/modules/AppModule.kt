@@ -10,6 +10,11 @@ import javax.inject.Singleton
 @Module
 class AppModule(val app: WorkshopApplication) {
 
+    /*
+    ************************************************************************************************
+    ** Public dependencies for injection
+    ************************************************************************************************
+     */
     @Provides
     @Singleton
     fun provideContext(): Context = app

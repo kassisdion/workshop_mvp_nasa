@@ -18,8 +18,6 @@ class FormActivity : BaseActivity(), FormView {
     ** Private field
     ************************************************************************************************
     */
-    //With Lazy we are going to create it as a non-nullable property
-    //and will be executed just when you use it and just the first time.
     private val mtoolbar by lazy {
         toolbar
     }
@@ -127,7 +125,7 @@ class FormActivity : BaseActivity(), FormView {
     }
 
     private fun setupView() {
-        mButton.setOnClickListener { x ->
+        mButton.setOnClickListener { _ ->
             val firstName = mTextInputLayoutFirstName.editText?.text.toString()
             val lastName = mTextInputLayoutLastName.editText?.text.toString()
 

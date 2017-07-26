@@ -19,7 +19,7 @@ abstract class BaseFullScreenActivity : BaseActivity() {
 
     /*
     ************************************************************************************************
-    ** Method every child will have to implement
+    ** Fun every child will have to implement
     ************************************************************************************************
     */
     protected abstract fun getTopView(): View

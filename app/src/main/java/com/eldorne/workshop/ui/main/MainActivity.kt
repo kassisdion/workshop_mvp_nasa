@@ -3,16 +3,25 @@ package com.eldorne.workshop.ui.main
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.app.ActionBar
 import android.view.MenuItem
 import android.view.View
+import android.widget.ArrayAdapter
+import android.widget.ListView
+import android.widget.Toast
 import com.eldorne.workshop.R
 import com.eldorne.workshop.WorkshopApplication
+import com.eldorne.workshop.api.response.SpaceObject
 import com.eldorne.workshop.ui.base.activity.BaseFullScreenActivity
 import kotlinx.android.synthetic.main.activity_main.*
+import java.lang.reflect.Array
+import java.util.*
+import java.util.function.BiConsumer
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
-class MainActivity : BaseFullScreenActivity(), MainActivityView {
+class MainActivity : BaseFullScreenActivity(), MainActivityView, SwipeRefreshLayout.OnRefreshListener {
 
     /*
     ************************************************************************************************
@@ -38,6 +47,12 @@ class MainActivity : BaseFullScreenActivity(), MainActivityView {
     ** Private field
     ************************************************************************************************
     */
+    lateinit var mAdapter: ArrayAdapter<String>
+
+    private val mSwipeRefreshLayout by lazy {
+        SwipeRefreshLayout_spaceObject
+    }
+
     private val mToolbar by lazy {
         toolbar
     }
@@ -52,6 +67,18 @@ class MainActivity : BaseFullScreenActivity(), MainActivityView {
 
     private val mActionbar: ActionBar? by lazy {
         supportActionBar
+    }
+
+    private val mRefreshButton: View? by lazy {
+        btn_refresh
+    }
+
+    private val mLoadingIndicator: View? by lazy {
+        ContentLoadingProgressBar_mainActivity
+    }
+
+    private val mlistView: ListView? by lazy {
+        listview_spaceObject
     }
 
     /*
@@ -75,6 +102,7 @@ class MainActivity : BaseFullScreenActivity(), MainActivityView {
         super.init(savedInstanceState)
         setupPresenter()
         setupToolbar()
+        setupView()
         mPresenter.setupView(mFirstName, mLastName)
     }
 
@@ -108,14 +136,66 @@ class MainActivity : BaseFullScreenActivity(), MainActivityView {
         finish()
     }
 
+    override fun showError(message: String?) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+    }
+
+    override fun showLoading(start: Boolean) {
+        mLoadingIndicator?.visibility = if (start) View.VISIBLE else View.GONE
+    }
+
+    override fun showRefreshing(start: Boolean) {
+        mSwipeRefreshLayout.isRefreshing = start
+    }
+
+    override fun populateSpaceObject(data: List<String>) {
+        mAdapter.addAll(data)
+    }
+
+    override fun clearData() {
+        mAdapter.clear()
+    }
+
     /*
     ************************************************************************************************
-    ** Private method
+    ** SwipeRefreshLayout.OnRefreshListener implementation
+    ************************************************************************************************
+     */
+    override fun onRefresh() {
+        mPresenter.onRefreshClicked()
+    }
+
+    /*
+    ************************************************************************************************
+    ** Private fun
     ************************************************************************************************
     */
     private fun setupPresenter() {
         WorkshopApplication.workshopComponent.inject(this)
         mPresenter.onAttachView(this)
+    }
+
+    private fun setupView() {
+        //Setup fab
+        mRefreshButton?.setOnClickListener { view ->
+            mPresenter.onRefreshClicked()
+        }
+
+        when () {
+            true -> {
+
+            }
+        }
+
+        //Setup listView
+        mAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1)
+        mlistView?.adapter = mAdapter
+
+        //Setup swipeRefreshLayout
+        mSwipeRefreshLayout.setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener { mPresenter.onItemHomeClick() })
+
+
+        mSwipeRefreshLayout.setOnRefreshListener(this)
     }
 
     private fun setupToolbar() {

@@ -6,6 +6,9 @@ import android.support.annotation.CallSuper
 import android.support.annotation.LayoutRes
 import android.support.v7.app.AppCompatActivity
 
+/**
+ * [AppCompatActivity] implementation used the provide a simplification of the life cycle
+ */
 @SuppressLint("Registered")
 abstract class BaseActivity : AppCompatActivity() {
 
@@ -14,6 +17,11 @@ abstract class BaseActivity : AppCompatActivity() {
     ** Life cycle
     ************************************************************************************************
     */
+    /**
+     * Will:
+     * -initialise the view with [getLayoutResource]
+     * -call [init]
+     */
     @CallSuper
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,7 +31,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
     /*
     ************************************************************************************************
-    ** Method every child will have to implement
+    ** Fun every child will have to implement
     ************************************************************************************************
     */
     /**

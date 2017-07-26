@@ -6,9 +6,13 @@ import javax.inject.Inject
 class FormPresenter
 @Inject
 constructor(/*Add needed dependencies here*/)
-
     : BasePresenter<FormView>() {
 
+    /*
+    ************************************************************************************************
+    ** Public fun
+    ************************************************************************************************
+     */
     fun onItemHomeClick() {
         view?.stopProcess()
     }
@@ -21,6 +25,11 @@ constructor(/*Add needed dependencies here*/)
         }
     }
 
+    /*
+    ************************************************************************************************
+    ** Private fun
+    ************************************************************************************************
+     */
     private fun isInputValid(firstName: String?,
                              lastName: String): Boolean {
         return (validateFirstName(firstName) && validateLastName(lastName))

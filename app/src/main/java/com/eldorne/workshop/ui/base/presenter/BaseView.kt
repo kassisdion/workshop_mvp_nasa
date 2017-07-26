@@ -1,5 +1,6 @@
 package com.eldorne.workshop.ui.base.presenter
 
-interface BaseView {
-
-}
+/**
+ * Simple interface use to generify the linking between a presenter and a view
+ */
+interface BaseView {}
