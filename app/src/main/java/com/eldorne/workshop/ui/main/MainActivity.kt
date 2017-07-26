@@ -12,14 +12,9 @@ import android.widget.ListView
 import android.widget.Toast
 import com.eldorne.workshop.R
 import com.eldorne.workshop.WorkshopApplication
-import com.eldorne.workshop.api.response.SpaceObject
 import com.eldorne.workshop.ui.base.activity.BaseFullScreenActivity
 import kotlinx.android.synthetic.main.activity_main.*
-import java.lang.reflect.Array
-import java.util.*
-import java.util.function.BiConsumer
 import javax.inject.Inject
-import kotlin.collections.ArrayList
 
 class MainActivity : BaseFullScreenActivity(), MainActivityView, SwipeRefreshLayout.OnRefreshListener {
 
@@ -179,12 +174,6 @@ class MainActivity : BaseFullScreenActivity(), MainActivityView, SwipeRefreshLay
         //Setup fab
         mRefreshButton?.setOnClickListener { view ->
             mPresenter.onRefreshClicked()
-        }
-
-        when () {
-            true -> {
-
-            }
         }
 
         //Setup listView

@@ -47,7 +47,7 @@ constructor(private val nasaApi: NasaApi)
                 },
                 failure = {
                     t ->
-                    Log.d("TAG", "retrieveCharacter > e= $t" )
+                    Log.d("TAG", "retrieveCharacter > e= $t")
                     showAnimation(isRefreshing, false)
                     view?.showError(t?.message)
                 })

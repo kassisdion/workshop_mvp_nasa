@@ -2,11 +2,10 @@ package com.eldorne.workshop
 
 import android.app.Application
 import android.content.Context
-import com.eldorne.workshop.di.modules.AppModule
 import com.eldorne.workshop.di.DaggerWorkshopComponent
-import com.eldorne.workshop.di.modules.NetworkModule
-
 import com.eldorne.workshop.di.WorkshopComponent
+import com.eldorne.workshop.di.modules.AppModule
+import com.eldorne.workshop.di.modules.NetworkModule
 
 class WorkshopApplication : Application() {
 

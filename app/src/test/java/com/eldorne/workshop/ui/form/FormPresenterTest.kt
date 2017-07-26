@@ -2,7 +2,6 @@ package com.eldorne.workshop.ui.form
 
 import com.eldorne.workshop.BuildConfig
 import org.junit.After
-import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -13,9 +12,6 @@ import org.powermock.core.classloader.annotations.PowerMockIgnore
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
-/**
- * Created by eldorne on 11/07/17.
- */
 @RunWith(RobolectricTestRunner::class)
 @PowerMockIgnore("org.mockito.*", "org.robolectric.*", "android.*", "org.powermock.*")
 @Config(manifest = Config.NONE, constants = BuildConfig::class)
@@ -27,26 +23,20 @@ class FormPresenterTest {
 
     var mPresenter: FormPresenter? = null
 
-    @Before
-    public fun setUp()
-    {
+    @Before fun setUp() {
         MockitoAnnotations.initMocks(this)
 
         mPresenter = FormPresenter()
-        mPresenter!!.onAttach(mFormView!!)
+        mPresenter!!.onAttachView(mFormView!!)
     }
 
-    @After
-    public fun tearDown()
-    {
-        mPresenter!!.onDetach()
+    @After fun tearDown() {
+        mPresenter!!.onDetachView()
         mPresenter = null
         mFormView = null
     }
 
-    @Test
-    public fun testSuccess()
-    {
+    @Test fun testSuccess() {
         mPresenter!!.onAttemptValidation("toto", "ttt")
         Mockito.verify<FormView>(mFormView, Mockito.times(1)).navigateToMainActivity("toto", "ttt")
     }
